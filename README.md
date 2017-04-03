@@ -23,7 +23,7 @@ my_tenant_lbaas_master.yaml
 |   Provisions a tenant network, subnet and router  
 |
 --my_tenant_InstanceWithFipAndCinderVolumeAndPoolMembership.yaml  
-|   Provision an instance with a FIP and a Cinder Volume and make-believe web server as a member of the lb pool
+|   Provision an instance with a FIP and a Cinder Volume and make-believe web server as a member of the lb pool  
 |
 --my_tenant_lbaasv2_scaleup.yaml  
     Provisioning a loadbalancer, Listener, Pool, Members and Healthmonitor  
