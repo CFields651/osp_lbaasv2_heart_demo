@@ -1,7 +1,7 @@
 heat_template_version: 2014-10-16
 
 description: >
-  Provisioning a loadbalancer, Listener, Pool, Members and Healthermonitor
+  Provisioning a loadbalancer, Listener, Pool, Members and Healthmonitor
 
 parameters: 
   public_network: 

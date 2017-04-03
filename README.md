@@ -20,13 +20,13 @@ my_tenant_lbaas_master.yaml
 |   Master template that puts together a network, router, loadbalancer and instances  
 | 
 --my_tenant_network.yaml  
-    Provisions a tenant network, subnet and router  
+|   Provisions a tenant network, subnet and router  
 |
 --my_tenant_InstanceWithFipAndCinderVolumeAndPoolMembership.yaml  
-|   Provision and instance with a FIP and a Cinder Volume and make-believe we server   
+|   Provision an instance with a FIP and a Cinder Volume and make-believe web server as a member of the lb pool
 |
 --my_tenant_lbaasv2_scaleup.yaml  
-    Provisioning a loadbalancer, Listener, Pool, Members and Healthermonitor  
+    Provisioning a loadbalancer, Listener, Pool, Members and Healthmonitor  
  
 my_tenant_lbaasv2_stdalone.yaml  
   This heat template creates a loadbalancer/listener/pool/members/healthmonitor from already existing tenant resoruces.  It is intended to be a simpler example than my_tenant_lbaas_scaleup.yaml  

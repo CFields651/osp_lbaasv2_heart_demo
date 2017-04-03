@@ -1,7 +1,7 @@
 heat_template_version: 2014-10-16
 
 description: >
-  Provision and instance with a FIP and a Cinder Volume and make-believe we server 
+  Provision an instance with a FIP and a Cinder Volume and make-believe web server as a member of the lb pool
 
 parameters: 
   key_name: 
