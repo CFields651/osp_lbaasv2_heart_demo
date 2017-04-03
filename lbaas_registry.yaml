@@ -1,0 +1,6 @@
+resource_registry:
+  My::Tenant::Network:                                         ./my_tenant_network.yaml
+  My::Tenant::InstanceWithFipAndCinderVolumeAndPoolMembership: ./my_tenant_InstanceWithFipAndCinderVolumeAndPoolMembership.yaml
+  My::Tenant::Loadbalancer:                                    ./my_tenant_lbaasv2_scaleup.yaml
+
+

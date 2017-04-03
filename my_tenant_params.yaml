@@ -1,0 +1,11 @@
+parameters:
+  key_name: demo-key
+  image_id: ef4584fd-1db4-4db7-9ef6-edf0da292cf2
+  external_network_name: external
+  flavor_name: m1.tiny
+  project: demo
+  num_instances: 2
+  startup_script: "echo $(hostname)"
+  lb_port: 80
+  lb_app_port: 80
+

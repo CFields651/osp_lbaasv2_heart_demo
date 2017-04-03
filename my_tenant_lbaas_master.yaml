@@ -1,0 +1,78 @@
+heat_template_version: 2014-10-16
+
+description: >
+  Master template that puts together a network, router, loadbalancer and instances
+
+parameters: 
+  key_name: 
+    type: string 
+  image_id: 
+    type: string 
+  external_network_name: 
+    type: string 
+  flavor_name: 
+    type: string 
+  project: 
+    type: string 
+  num_instances: 
+    type: number 
+  startup_script: 
+    type: string
+  lb_port:
+    type: number
+  lb_app_port: 
+    type: number
+
+resources: 
+  network: 
+    type: My::Tenant::Network
+    properties: 
+        external_network_name: { get_param: external_network_name } 
+        project: { get_param: project } 
+ 
+  loadbalancer:
+    type: My::Tenant::Loadbalancer
+    properties:
+      public_network: { get_param: external_network_name }
+      lb_subnet: { get_attr: [ network, network_subnet_id ]}
+      lb_port: { get_param: lb_port }
+      lb_app_port: { get_param: lb_app_port }
+
+  instance: 
+    type: OS::Heat::ResourceGroup 
+    depends_on: [ network, loadbalancer ] 
+    properties: 
+      count: { get_param: num_instances } 
+      resource_def: 
+        type: My::Tenant::InstanceWithFipAndCinderVolumeAndPoolMembership
+        properties: 
+          network: { get_attr: [ network, network_id ] } 
+          key_name: { get_param: key_name } 
+          image_id: { get_param: image_id } 
+          external_network_name: { get_param: external_network_name } 
+          flavor_name: { get_param: flavor_name } 
+          project: { get_param: project } 
+          startup_script: { get_param: startup_script } 
+          instance_name: 
+            list_join: 
+              - "-" 
+              - [ { get_param: "OS::stack_name"}, instance_%index% ] 
+          lb_pool: { get_attr: [ loadbalancer, pool_id ] }
+          lb_app_port: { get_param: lb_app_port }
+          lb_subnet: { get_attr: [ network, network_subnet_id ]}
+ 
+outputs: 
+   network_router_id: 
+     value: { get_attr: [ network, network_router_id ] } 
+   instance_floating_ips: 
+     value: { get_attr: [ instance, instance_floating_ip ] } 
+   instance_ip:
+     value: { get_attr: [ instance, instance1_ip ] }
+   instance_cinder_volume: 
+      value: { get_attr: [ instance, instance_cinder_volume_id ] } 
+   instance_resource_ids: 
+      value: { get_attr: [ instance, instance_resource_id ] } 
+   loadbalancer_id:
+      value: { get_attr: [ loadbalancer, loadbalancer_id ] }
+   pool_id: 
+      value: { get_attr: [ loadbalancer, pool_id ] }

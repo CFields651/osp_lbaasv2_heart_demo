@@ -1,0 +1,96 @@
+heat_template_version: 2014-10-16
+
+description: >
+  Provision and instance with a FIP and a Cinder Volume and make-believe we server 
+
+parameters: 
+  key_name: 
+    type: string 
+  image_id: 
+    type: string 
+  external_network_name: 
+    type: string 
+  flavor_name: 
+    type: string 
+  project: 
+    type: string 
+  network: 
+    type: string 
+  startup_script: 
+    type: string 
+  instance_name: 
+    type: string 
+  lb_pool: 
+    type: string
+  lb_app_port: 
+    type: number
+  lb_subnet: 
+    type: string
+ 
+resources: 
+  instance0: 
+    type: OS::Nova::Server 
+    properties: 
+      name: { get_param: instance_name } 
+      image: { get_param: image_id } 
+      flavor: { get_param: flavor_name } 
+      key_name: { get_param: key_name } 
+      networks: 
+        - network: { get_param: network } 
+      security_groups: 
+        - default 
+      user_data_format: RAW
+      user_data: 
+        str_replace: 
+          template: |
+            #!/bin/sh
+            while true; do { echo -e 'HTTP/1.1 200 OK\r\n\r\n'; echo 'This is '; echo $(hostname);} | sudo nc -lp 80 -w 1;done
+          params:
+            PORT: { get_param: lb_app_port }
+
+  heat_floating_ip0: 
+    type: OS::Nova::FloatingIP 
+    properties: 
+     pool: { get_param: external_network_name } 
+  heat_floating_ip_assoc0_instance0: 
+    type: OS::Nova::FloatingIPAssociation 
+    properties: 
+      floating_ip: { get_resource: heat_floating_ip0 } 
+      server_id: { get_resource: instance0 } 
+ 
+  pool_member0:
+    type: OS::Neutron::LBaaS::PoolMember
+    properties:
+      pool: { get_param: lb_pool }
+      address: { get_attr: [ instance0, first_address ] }
+      protocol_port: { get_param: lb_app_port }
+      subnet: { get_param: lb_subnet }
+
+  heat_volume0: 
+    type: OS::Cinder::Volume 
+    properties: 
+      description: "yay im a new volume ^_^" 
+      name: 
+        list_join: 
+          - "-" 
+          - [ { get_param: project }, { get_param: "OS::stack_name" } ] 
+      size: 10 
+  heat_volume0_attch: 
+    type: OS::Cinder::VolumeAttachment 
+    properties: 
+      instance_uuid: { get_resource: instance0 } 
+      volume_id: { get_resource: heat_volume0 } 
+ 
+outputs: 
+  instance_floating_ip: 
+    description: The floating IP address of the deployed instance 
+    value: { get_attr: [ heat_floating_ip0, ip ] } 
+  instance_resource_id: 
+    description: The id of each deployed instance 
+    value: { get_resource: instance0 } 
+  instance_cinder_volume_id: 
+    description: The id of the cinder volume created for this instance 
+    value: { get_resource: heat_volume0 }
+  instance1_ip:
+    description: "ip address"
+    value: { get_attr: [ instance0, first_address ]}

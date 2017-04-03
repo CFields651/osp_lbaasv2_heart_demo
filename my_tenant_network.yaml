@@ -1,0 +1,59 @@
+heat_template_version: 2014-10-16
+
+description: >
+  Provisions a tenant network, subnet and router
+
+parameters: 
+  external_network_name: 
+    type: string 
+  project: 
+    type: string 
+ 
+resources: 
+  heat_network_01: 
+    type: OS::Neutron::Net 
+    properties: 
+      admin_state_up: true 
+      name: 
+        list_join: 
+          - "-" 
+          - [ { get_param: project }, { get_param: "OS::stack_name" }, "network-1" ] 
+  heat_subnet_01: 
+    type: OS::Neutron::Subnet 
+    properties: 
+      name: 
+        list_join: 
+          - "-" 
+          - [ { get_param: project }, { get_param: "OS::stack_name" }, "subnet-1" ] 
+      cidr: 192.168.196.0/24 
+      dns_nameservers: 
+        - 10.97.40.215 
+        - 10.64.40.215 
+      enable_dhcp: true 
+      network_id: { get_resource: heat_network_01 } 
+  heat_router_01: 
+    type: OS::Neutron::Router 
+    properties: 
+      external_gateway_info: 
+        network: { get_param: external_network_name } 
+      admin_state_up: true 
+      name: 
+        list_join: 
+          - "-"
+          - [ { get_param: project }, { get_param: "OS::stack_name" }, "router-1" ] 
+  heat_router_int0: 
+    type: OS::Neutron::RouterInterface 
+    properties: 
+      router_id: { get_resource: heat_router_01 } 
+      subnet_id: { get_resource: heat_subnet_01 } 
+ 
+outputs: 
+  network_id: 
+    value: { get_resource: heat_network_01 } 
+    description: GUID of the network created by this template 
+  network_subnet_id: 
+    value: { get_resource: heat_subnet_01 } 
+    description: GUID of the subnet created by this template 
+  network_router_id: 
+    value: { get_resource: heat_router_01 } 
+    description: GUID of the router created by this template 
