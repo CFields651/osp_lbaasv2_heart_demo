@@ -17,13 +17,17 @@ curl $fip
 Note that you can adjust the number of instances with the num_instances param in my_tenant_params.yaml  
 
 my_tenant_lbaas_master.yaml: Master template that puts together a network, router, loadbalancer and instances  
-| 
+
+  
 --my_tenant_network.yaml: Provisions a tenant network, subnet and router  
-|
+
+
 --my_tenant_InstanceWithFipAndCinderVolumeAndPoolMembership.yaml: Instance with make-believe web server and pool member  
-|
+
+
 --my_tenant_lbaasv2_scaleup.yaml: Provisions a loadbalancer, Listener, Pool, Members and Healthmonitor  
- 
+
+  
 my_tenant_lbaas_registry.yaml  
     Resource registry to define custom resource types  
 
