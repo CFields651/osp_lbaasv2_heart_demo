@@ -1,4 +1,4 @@
-#lbaasv2-heat-demo  
+# osp_lbaasv2_heat_demo  
 This repo contains heat templates that provision a tenant network/subnet/router and instances.  
 It also creates a loadbalancer/listener/pool with the instances as members and a health monitor. 
 The cirros instances get a make-believe but functional web server that respond to VIP requests.  
@@ -26,13 +26,10 @@ Custom resource types or child templates:
 --my_tenant_lbaasv2_scaleup.yaml: Provisions a loadbalancer, Listener, Pool, Members and Healthmonitor  
 
   
-my_tenant_lbaas_registry.yaml  
-    Resource registry to define custom resource types  
+my_tenant_lbaas_registry.yaml:Resource registry to define custom resource types  
 
-my_tenant_params.yaml  
-    Put the values for your parameters here  
+my_tenant_params.yaml: Put the values for your parameters here  
 
-my_tenant_lbaasv2_stdalone.yaml  
-  This heat template creates a loadbalancer/listener/pool/members/healthmonitor from already existing tenant resoruces.  It is intended to be a simpler example than my_tenant_lbaas_scaleup.yaml  
+my_tenant_lbaasv2_stdalone.yaml: This heat template creates a loadbalancer/listener/pool/members/healthmonitor from already existing tenant resoruces.  It is intended to be a simpler example than my_tenant_lbaas_scaleup.yaml  
 
 
