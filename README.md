@@ -28,6 +28,12 @@ my_tenant_lbaas_master.yaml
 --my_tenant_lbaasv2_scaleup.yaml  
     Provisioning a loadbalancer, Listener, Pool, Members and Healthmonitor  
  
+my_tenant_lbaas_registry.yaml  
+    Resource registry to defines custom resource types  
+
+my_tenant_params.yaml  
+    Put the values for your parameters here  
+
 my_tenant_lbaasv2_stdalone.yaml  
   This heat template creates a loadbalancer/listener/pool/members/healthmonitor from already existing tenant resoruces.  It is intended to be a simpler example than my_tenant_lbaas_scaleup.yaml  
 
