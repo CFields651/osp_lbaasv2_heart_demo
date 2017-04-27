@@ -1,9 +1,9 @@
 parameters:
   key_name: demo-key
-  image_id: ef4584fd-1db4-4db7-9ef6-edf0da292cf2
-  external_network_name: external
+  image_id: 2c4d2f24-8e99-4788-82ee-6fc7da230b94
+  external_network_name: public
   flavor_name: m1.tiny
-  project: demo
+  project: demo02
   num_instances: 2
   startup_script: "echo $(hostname)"
   lb_port: 80

@@ -6,23 +6,25 @@ description: >
 parameters: 
   public_network: 
     type: string
-    default: external
-    description: name of the external network
+    default: public
+    description: name of the existing external network
   lb_subnet:
     type: string
-    description: id of subnet to loadbalance
-    default: 95f686f6-1cfe-4cb9-bf17-458999c5b1c6
+    description: id of existing subnet to loadbalance
   lb_port:
     type: number
     description: port lb listens on
     default: 80
   lb_app_port:
     type: number
-    default: port for application
+    description: port for application
     default: 80
-  member1_ip:
-    type: comma_delimited_list
-    default: 192.168.123.6,192.168.123.4
+  member_ip1:
+    type: string
+    description: local ips of 1st instance
+  member_ip2:
+    type: string
+    description: local ips of 2nd instance
  
 resources:
   load-balancer:
@@ -45,13 +47,20 @@ resources:
       lb_algorithm: ROUND_ROBIN
       protocol: HTTP
       listener: { get_resource: listener }
-      members: { get_param: member1_ip }
 
   pool_member1:
     type: OS::Neutron::LBaaS::PoolMember
     properties:
       pool: { get_resource: pool }
-      address: { get_param: member1_ip }
+      address: { get_param: member_ip1 }
+      protocol_port: { get_param: lb_app_port }
+      subnet: { get_param: lb_subnet }
+
+  pool_member2:
+    type: OS::Neutron::LBaaS::PoolMember
+    properties:
+      pool: { get_resource: pool }
+      address: { get_param: member_ip2 }
       protocol_port: { get_param: lb_app_port }
       subnet: { get_param: lb_subnet }
 
@@ -72,7 +81,8 @@ resources:
 
 outputs: 
   loadbalancer_id: 
-    value: { get_resource: load-balancer }
     description: "id the loadbalancer"
-  pool_id: { get_resource: pool }
-    descriptpion: "id of pool" 
+    value: { get_resource: load-balancer }
+  pool_id: 
+    description: "id of pool" 
+    value: { get_resource: pool }
