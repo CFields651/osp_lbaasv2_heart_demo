@@ -5,13 +5,6 @@ The cirros instances get a make-believe but functional web server that respond t
 
 #To create full stack:  
 openstack stack create -t my_tenant_lbaas_master.yaml lbaas_demo -e my_tenant_params.yaml -e my_tenant_lbaas_registry.yaml   
-#To create stand alone (loadblancer only):  
-Note: you will need an existing private subnet and two instances with local ips on that subnet for this template. 
-openstack stack create -t  my_tenant_lbaasv2_stdalone.yaml stdalone_lbaasv2 --parameter "lb_subnet=[guid of existing subnet]" --parameter "member_ip1=[local ip of 1st instance]" --parameter "member_ip2=[local ip of 2nd instance]"  
-
-Note: parameters could be specified this way too:  
---parameter "lb_subnet=c31cba83-4984-4e35-9cf4-56bc8577ff32;member_ip1=10.0.1.11;member_ip2=10.0.1.12"  
-
 #Once the stack is deployed successfully,   
 fip=$(neutron floatingip-list | \  
   grep $(neutron lbaas-loadbalancer-show  -c vip_address -f value lbaas_demo_loadbalancer) | \  
@@ -43,4 +36,9 @@ my_tenant_params.yaml: Put the values for your parameters here
 
 my_tenant_lbaasv2_stdalone.yaml: This heat template creates a loadbalancer/listener/pool/members/healthmonitor from already existing tenant resoruces.  It is intended to be a simpler example than my_tenant_lbaas_scaleup.yaml  
 
+#To create stand alone (loadblancer only) with my_tenant_lbaasv2_stdalone.yaml: 
+Note: you will need an existing private subnet and two instances with local ips on that subnet for this template. 
+openstack stack create -t  my_tenant_lbaasv2_stdalone.yaml stdalone_lbaasv2 --parameter "lb_subnet=[guid of existing subnet]" --parameter "member_ip1=[local ip of 1st instance]" --parameter "member_ip2=[local ip of 2nd instance]"  
 
+Note: parameters could be specified this way too:  
+--parameter "lb_subnet=c31cba83-4984-4e35-9cf4-56bc8577ff32;member_ip1=10.0.1.11;member_ip2=10.0.1.12"  

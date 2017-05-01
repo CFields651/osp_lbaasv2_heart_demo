@@ -25,7 +25,7 @@ resources:
         list_join: 
           - "-" 
           - [ { get_param: project }, { get_param: "OS::stack_name" }, "subnet-1" ] 
-      cidr: 192.168.196.0/24 
+      cidr: 10.0.2.0/24 
       dns_nameservers: 
         - 10.97.40.215 
         - 10.64.40.215 

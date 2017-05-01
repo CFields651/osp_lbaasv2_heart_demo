@@ -74,7 +74,7 @@ resources:
         list_join: 
           - "-" 
           - [ { get_param: project }, { get_param: "OS::stack_name" } ] 
-      size: 10 
+      size: 2
   heat_volume0_attch: 
     type: OS::Cinder::VolumeAttachment 
     properties: 
